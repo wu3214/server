@@ -120,14 +120,24 @@ res.end()
   // res.send('Hello World');
 })
 //
-app.get('/getUrl', function (req, res) {
+app.get('/register', function (req, res) {
   console.log('req',req.query)
-  console.log('reqid',req.query.id)
-    
+  console.log('formname',req.query.formname)
+  console.log('formpw',req.query.formpw)
+  console.log('formpw',req.query.formemail)
+  console.log('formpw',req.query.formphone)
+  
   // var  sql = "SELECT * FROM yonghu where name='$req.query.formname'"
-  var  sql = "SELECT * FROM tourl where id= ?"
+  // var  sql = "SELECT * FROM yonghu where name= ?"
+  // var  sql = "SELECT * FROM yonghu where name= ?"
+  // var  sql = "INSERT INTO yonghu(id, name, registrationDate,email,phone,password) SELECT 0, ?,now(),?,?,? FROM DUAL WHERE NOT EXISTS(SELECT name FROM yonghu WHERE name = ?);"
+  var  sql = "INSERT INTO yonghu(id,name,registrationDate,email,phone,password) SELECT 0, ?,now(),?,?,? FROM DUAL WHERE NOT EXISTS(SELECT name FROM yonghu WHERE name = ?);"
+  // connection.query(sql,req.query.formname,req.query.formemail,req.query.formphone,req.query.formpw,req.query.formname,function (err, result) {
+  
+  // connection.query(sql,[req.query.formname,req.query.formemail,req.query.formphone,req.query.formpw,req.query.formname],function (err, result) {
+  // connection.query( "INSERT INTO yonghu(id,name,registrationDate,email,phone,password) SELECT 0,"+req.query.formname+",now()","+req.query.formemail+","+req.query.formphone+","+req.query.formpw+" FROM DUAL WHERE NOT EXISTS(SELECT name FROM yonghu WHERE name ="+req.query.formname+");",function (err, result) {
+    connection.query( sql,[req.query.formname,req.query.formemail,req.query.formphone,req.query.formpw,req.query.formname],function (err, result) {
 
-   connection.query(sql,req.query.id,function (err, result) {
      var str =JSON.stringify(result)
      var str1 = JSON.parse(str);
      console.log('str',str)
@@ -137,7 +147,7 @@ app.get('/getUrl', function (req, res) {
      res.set({
       'Content-Type': 'text/plain',
     })
-    res.send(str1)
+    // res.send(str1)
     res.end()
     return
    })
